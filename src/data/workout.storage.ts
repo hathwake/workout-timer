@@ -1,7 +1,7 @@
-import {Workout} from "./workout.type";
+import {WorkoutId} from "./workout.type";
 
 export class WorkoutStorage {
-    public async list(): Promise<Workout[]> {
+    public async list(): Promise<WorkoutId[]> {
         const ids: string[] = [];
 
         for(let i = 0; i < localStorage.length; i++) {
@@ -13,13 +13,13 @@ export class WorkoutStorage {
 
         return await Promise.all(ids.map(id => this.get(id)));
     }
-    public async store(workout: Workout): Promise<void> {
+    public async store(workout: WorkoutId): Promise<void> {
         localStorage.setItem(`workout:${workout.id}`, JSON.stringify(workout));
     }
     public async delete(id: string): Promise<void> {
         localStorage.removeItem(`workout:${id}`);
     }
-    public async get(id: string): Promise<Workout> {
+    public async get(id: string): Promise<WorkoutId> {
         const item = localStorage.getItem(`workout:${id}`);
         if(item) {
             return JSON.parse(item);

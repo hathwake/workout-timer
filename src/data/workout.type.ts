@@ -2,6 +2,7 @@
 
 export interface Exercise {
     type: "ex"
+    name: string;
     length: number;
     pause?: number;
 }
@@ -13,6 +14,10 @@ export interface Repetition {
 }
 
 export interface Workout {
-    id: string;
+    name: string;
     plan: (Exercise | Repetition)[]
+}
+
+export interface WorkoutId extends Workout {
+    id: string;
 }

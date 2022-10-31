@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import {Workout} from "../data/workout.type";
+import {WorkoutId} from "../data/workout.type";
 import {Checkbox, Empty, List} from "antd";
 
 
 export interface WorkoutListProps {
-    workouts: Workout[];
+    workouts: WorkoutId[];
     markedIds?: string[];
     onWorkoutMarked?: (id: string, checked: boolean) => void;
 }

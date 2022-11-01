@@ -6,7 +6,7 @@ import { Workout, WorkoutId } from "../data/workout.type";
 
 export const AddWorkoutPage: React.FC = () => {
     const [workout, setWorkout] = useState<Workout>({
-        name: "",
+        name: "hello",
         plan: [
             {
                 type: "ex",

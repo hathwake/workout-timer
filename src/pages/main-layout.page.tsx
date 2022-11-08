@@ -9,10 +9,10 @@ export const AppMainLayout = () => {
     const navigate = useNavigate();
 
     const menuItems: ItemType[] = [
-        {
-            label: <>WorkoutTimer</>,
-            key: "appName",
-        },
+        // {
+        //     label: <>WorkoutTimer</>,
+        //     key: "appName",
+        // },
         {
             label: <>Home</>,
             key: "home",
@@ -20,18 +20,14 @@ export const AppMainLayout = () => {
                 navigate("/home");
             }
         },
-        {
-            label: <>Test</>,
-            key: "test",
-            onClick: () => {
-                navigate("/test");
-            }
-        }
     ];
 
     return (
         <Layout style={{ height: "100%" }}>
-            <Header>
+            <Header style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+                <span style={{lineHeight: "inherit", color: "white"}}>
+                WorkoutTimer
+                </span>
                 <Menu mode={"horizontal"} theme={"dark"} items={menuItems} />
             </Header>
 

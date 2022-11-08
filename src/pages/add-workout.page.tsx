@@ -18,7 +18,7 @@ export const AddWorkoutPage: React.FC = () => {
     const navigate = useNavigate();
 
     const onFinish = (workout: Workout) => {
-
+        console.log("finished", workout);
     }
 
     const onCancel = () => {

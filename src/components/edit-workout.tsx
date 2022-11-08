@@ -23,38 +23,27 @@ const Collapsible: React.FC<PropsWithChildren<{ header: React.ReactNode }>> = ({
     </Collapse>
 }
 
-const EditExercise: React.FC<{value?: any}> = ({ value }) => {
-    console.log("ex", value);
-    const form = Form.useFormInstance();
-    const nameWatch = Form.useWatch("name", form);
-
+const EditExercise: React.FC<{fieldName: any}> = ({ fieldName }) => {
     return <>
-        <Collapsible header={nameWatch}>
-            <Form.Item name={"name"}>
-                <Input></Input>
-            </Form.Item>
+        <Form.Item label="Name" name={[fieldName, "name"]}>
+            <Input></Input>
+        </Form.Item>
 
-            <Form.Item name={"length"}>
-                <InputNumber min={0}></InputNumber>
-            </Form.Item>
+        <Form.Item label="Duration" name={[fieldName, "length"]}>
+            <InputNumber min={0}></InputNumber>
+        </Form.Item>
 
-            <Form.Item name={"pause"}>
-                <InputNumber addonBefore={
-                    <Checkbox></Checkbox>
-                }></InputNumber>
-            </Form.Item>
-        </Collapsible>
+        <Form.Item label="Pause" name={[fieldName, "pause"]}>
+            <InputNumber addonBefore={
+                <Checkbox></Checkbox>
+            }></InputNumber>
+        </Form.Item>
     </>
 }
 
 export const EditPlan: React.FC<{}> = ({ }) => {
     const form = Form.useFormInstance();
-    const planValue: Workout["plan"] | undefined = Form.useWatch("plan", form);
-
-    const items = planValue?.map((item, index) => {
-
-    }) || [];
-
+    // const planValue: Workout["plan"] | undefined = Form.useWatch("plan", form);
 
     return <Form.List name="plan">
         {
@@ -66,8 +55,8 @@ export const EditPlan: React.FC<{}> = ({ }) => {
                     const type = form.getFieldValue(["plan", field.name, "type"]);
 
                     if (type === "ex") {
-                        return <Form.Item key={field.key} name={field.name}>
-                            <EditExercise></EditExercise>
+                        return <Form.Item key={field.key}>
+                            <EditExercise fieldName={field.name}></EditExercise>
                         </Form.Item>
                     } else {
                         throw new Error("Unsupported item");
@@ -86,7 +75,7 @@ export const EditWorkout: React.FC<EditWorkoutProps<Workout>> = ({ workout, onFi
     }, [form, workout])
 
     return <>
-        <Form form={form} onFinish={(values) => onFinish(workout)} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields   )}>
+        <Form form={form} onFinish={(values) => onFinish(form.getFieldsValue(true))} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields   )}>
             <Form.Item label="Name" name="name">
                 <Input></Input>
             </Form.Item>

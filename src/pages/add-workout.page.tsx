@@ -1,11 +1,10 @@
-import { Form, Input, Modal } from "antd";
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EditWorkout } from "../components/edit-workout";
-import { Workout, WorkoutId } from "../data/workout.type";
+import { Workout } from "../data/workout.type";
 
 export const AddWorkoutPage: React.FC = () => {
-    const [workout, setWorkout] = useState<Workout>({
+    const [workout] = useState<Workout>({
         name: "hello",
         plan: [
             {
@@ -19,14 +18,14 @@ export const AddWorkoutPage: React.FC = () => {
 
     const onFinish = (workout: Workout) => {
         console.log("finished", workout);
-    }
+    };
 
     const onCancel = () => {
         navigate(-1);
-    }
+    };
 
     return <>
         <h1>Add Workout</h1>
         <EditWorkout workout={workout} onFinish={onFinish} onCancel={onCancel}/>
-    </>
-}
+    </>;
+};

@@ -31,4 +31,4 @@ export class WorkoutStorage {
 
 export const useWorkoutStorage = () => {
     return new WorkoutStorage();
-}
+};

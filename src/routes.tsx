@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import { HomePage, HomeLoaderData } from "./pages/home.page";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useWorkoutStorage } from "./data/workout.storage";
-import { NotFoundPage } from './pages/not-found.page';
-import { AddWorkoutPage } from './pages/add-workout.page';
-import { AppMainLayout } from './pages/main-layout.page';
+import { NotFoundPage } from "./pages/not-found.page";
+import { AddWorkoutPage } from "./pages/add-workout.page";
+import { AppMainLayout } from "./pages/main-layout.page";
 
 export const routes = createBrowserRouter([
     {

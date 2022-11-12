@@ -7,7 +7,7 @@ export const NotFoundPage: React.FC = () => {
     
     const goToHome = () => {
         navigate("/home");
-    }
+    };
     
     return <>
         <Result
@@ -18,4 +18,4 @@ export const NotFoundPage: React.FC = () => {
             </>}
         ></Result>
     </>;
-}
+};

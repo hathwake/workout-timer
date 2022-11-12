@@ -1,7 +1,6 @@
-import React from 'react';
 import { Col, Layout, Menu, Row } from "antd";
 import { useNavigate, Outlet } from "react-router-dom";
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import { ItemType } from "antd/lib/menu/hooks/useItems";
 
 const { Header, Content } = Layout;
 

@@ -1,10 +1,6 @@
-import { Button, Checkbox, Collapse, Form, FormListFieldData, FormListOperation, Input, InputNumber } from "antd";
-import { FormInstance } from "rc-field-form";
-import React, { PropsWithChildren, useEffect } from "react";
-import { Workout, WorkoutId } from "../data/workout.type"
-import { reactIf } from "../directives/if";
-
-type NamePathPrefix = (string | number)[];
+import { Button, Checkbox, Form, FormListFieldData, FormListOperation, Input, InputNumber } from "antd";
+import React, { useEffect } from "react";
+import { Workout } from "../data/workout.type";
 
 export interface EditWorkoutProps<W extends Workout> {
     workout: W;
@@ -15,15 +11,15 @@ export interface EditWorkoutProps<W extends Workout> {
     cancelText?: string;
 }
 
-const Collapsible: React.FC<PropsWithChildren<{ header: React.ReactNode }>> = ({ header, children }) => {
-    return <Collapse>
-        <Collapse.Panel key="0" header={header}>
-            {children}
-        </Collapse.Panel>
-    </Collapse>
-}
+// const Collapsible: React.FC<PropsWithChildren<{ header: React.ReactNode }>> = ({ header, children }) => {
+//     return <Collapse>
+//         <Collapse.Panel key="0" header={header}>
+//             {children}
+//         </Collapse.Panel>
+//     </Collapse>;
+// };
 
-const EditExercise: React.FC<{fieldName: any}> = ({ fieldName }) => {
+const EditExercise: React.FC<{ fieldName: any }> = ({ fieldName }) => {
     return <>
         <Form.Item label="Name" name={[fieldName, "name"]}>
             <Input></Input>
@@ -38,10 +34,10 @@ const EditExercise: React.FC<{fieldName: any}> = ({ fieldName }) => {
                 <Checkbox></Checkbox>
             }></InputNumber>
         </Form.Item>
-    </>
-}
+    </>;
+};
 
-export const EditPlan: React.FC<{}> = ({ }) => {
+export const EditPlan: React.FC<{}> = () => {
     const form = Form.useFormInstance();
     // const planValue: Workout["plan"] | undefined = Form.useWatch("plan", form);
 
@@ -57,25 +53,25 @@ export const EditPlan: React.FC<{}> = ({ }) => {
                     if (type === "ex") {
                         return <Form.Item key={field.key}>
                             <EditExercise fieldName={field.name}></EditExercise>
-                        </Form.Item>
+                        </Form.Item>;
                     } else {
                         throw new Error("Unsupported item");
                     }
-                })
+                });
             }
         }
-    </Form.List>
-}
+    </Form.List>;
+};
 
 export const EditWorkout: React.FC<EditWorkoutProps<Workout>> = ({ workout, onFinish, onCancel, submitText, cancelText }) => {
     const [form] = Form.useForm<Workout>();
 
     useEffect(() => {
-        form.setFieldsValue(workout)
-    }, [form, workout])
+        form.setFieldsValue(workout);
+    }, [form, workout]);
 
     return <>
-        <Form form={form} onFinish={(values) => onFinish(form.getFieldsValue(true))} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields   )}>
+        <Form form={form} onFinish={(values) => onFinish(form.getFieldsValue(true))} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields)}>
             <Form.Item label="Name" name="name">
                 <Input></Input>
             </Form.Item>
@@ -89,5 +85,5 @@ export const EditWorkout: React.FC<EditWorkoutProps<Workout>> = ({ workout, onFi
                 </Button.Group>
             </Form.Item>
         </Form>
-    </>
-}
+    </>;
+};

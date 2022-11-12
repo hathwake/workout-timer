@@ -5,6 +5,6 @@ export const reactIf = (condition: boolean, node: React.ReactNode, elseNode?: Re
     if(condition) {
         return node;
     } else {
-        return elseNode ?? <></>
+        return elseNode ?? <></>;
     }
-}
+};

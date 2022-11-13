@@ -7,7 +7,7 @@ export interface ExerciseId extends Exercise {
 export interface Exercise {
     type: "ex"
     name: string;
-    length: number;
+    duration: number;
     pause?: number;
 }
 

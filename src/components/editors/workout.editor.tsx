@@ -19,8 +19,15 @@ export const EditWorkout: React.FC<EditWorkoutProps<Workout>> = ({ workout, onFi
         form.setFieldsValue(workout);
     }, [form, workout]);
 
+    // onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields)}
     return <>
-        <Form form={form} onFinish={(values) => onFinish(form.getFieldsValue(true))} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFieldsChange={(changedFields, allFields) => console.log("changed", changedFields, allFields)}>
+        <Form
+            form={form}
+            layout="vertical"
+            onFinish={(values) => onFinish(form.getFieldsValue(true))}
+            // labelCol={{ span: 24 }}
+            // wrapperCol={{ span: 24 }}
+        >
             <Form.Item label="Name" name="name">
                 <Input></Input>
             </Form.Item>

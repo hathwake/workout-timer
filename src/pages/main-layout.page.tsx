@@ -30,9 +30,9 @@ export const AppMainLayout = () => {
                 <Menu mode={"horizontal"} theme={"dark"} items={menuItems} />
             </Header>
 
-            <Content style={{padding: "10px"}}>
+            <Content style={{padding: "10px", overflow: "auto"}}>
                 <Row>
-                    <Col md={{ span: 12, offset: 6 }} xs={{ span: 24, offset: 0 }}>
+                    <Col style={{padding: "24px", background: "white"}} md={{ span: 12, offset: 6 }} xs={{ span: 24, offset: 0 }}>
                         <Outlet></Outlet>
                     </Col>
                 </Row>

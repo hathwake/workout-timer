@@ -9,7 +9,7 @@ export const AddWorkoutPage: React.FC = () => {
         plan: [
             {
                 type: "ex",
-                length: 30.0,
+                duration: 30.0,
                 name: "Push-Ups"
             }
         ]

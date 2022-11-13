@@ -1,5 +1,9 @@
 
 
+export interface ExerciseId extends Exercise {
+    id: string;
+}
+
 export interface Exercise {
     type: "ex"
     name: string;

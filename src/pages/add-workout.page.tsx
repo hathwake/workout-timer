@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { EditWorkout } from "../components/edit-workout";
+import { EditWorkout } from "../components/editors/workout.editor";
 import { Workout } from "../data/workout.type";
 
 export const AddWorkoutPage: React.FC = () => {

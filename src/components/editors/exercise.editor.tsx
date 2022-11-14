@@ -1,15 +1,17 @@
-import { Input, InputNumber, Checkbox, Form, Row, Col } from "antd";
+import { Input, InputNumber, Checkbox, Form, Row, Col, Collapse } from "antd";
+import CollapsePanel from "antd/lib/collapse/CollapsePanel";
 import React, { useState } from "react";
 import { Exercise } from "../../data/workout.type";
 
 import "./exercise.editor.css";
 
 export interface EditExerciseProps {
+    id?: string;
     value?: Exercise;
     onChange?: (value: Exercise) => void;
 }
 
-export const EditExercise: React.FC<EditExerciseProps> = ({ value, onChange }) => {
+export const EditExercise: React.FC<EditExerciseProps> = ({id, value, onChange}) => {
     const [name, setName] = useState<Exercise["name"]>("");
     const [duration, setDuration] = useState<Exercise["duration"]>(0);
     const [pause, setPause] = useState<Exercise["pause"]>(0);
@@ -72,7 +74,7 @@ export const EditExercise: React.FC<EditExerciseProps> = ({ value, onChange }) =
         });
     };
 
-    return <div className="editor-exercise">
+    return <div>
         <Form.Item label="Name">
             <Input value={value?.name || name} onChange={onNameChange}></Input>
         </Form.Item>

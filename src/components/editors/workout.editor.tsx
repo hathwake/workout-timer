@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import React, { useEffect } from "react";
 import { Workout } from "../../data/workout.type";
 import { EditPlan } from "./plan.editor";
@@ -24,13 +24,13 @@ export const EditWorkout: React.FC<EditWorkoutProps<Workout>> = ({ workout, onFi
         <Form
             form={form}
             layout="vertical"
-            onFinish={(values) => onFinish(form.getFieldsValue(true))}
-            // labelCol={{ span: 24 }}
-            // wrapperCol={{ span: 24 }}
+            onFinish={(values) => onFinish(values)}
         >
             <Form.Item label="Name" name="name">
                 <Input></Input>
             </Form.Item>
+
+            <Divider type="horizontal">Plan</Divider>
 
             <EditPlan></EditPlan>
 

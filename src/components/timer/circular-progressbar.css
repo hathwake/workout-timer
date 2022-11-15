@@ -1,0 +1,17 @@
+svg.progress-bar {
+    width: 100%;
+    height: 100%;
+
+}
+
+svg.progress-bar circle {
+    /* from circle definition r=10 */
+    --radius: 100;
+    --pi: 3.1415;
+    --circumference: calc(2 * var(--pi) * var(--radius));
+
+    fill: none;
+    stroke: black;
+    stroke-dasharray: var(--circumference);
+    stroke-dashoffset: calc(var(--circumference) * (1 - var(--progress)));
+}

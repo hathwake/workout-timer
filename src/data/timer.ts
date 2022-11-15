@@ -71,8 +71,6 @@ export class Timer {
         this.duration = this.steps.reduce((prev, curr) => prev + curr.duration, 0);
 
         this.tick();
-
-        console.log("currentStep", this.currentStep);
     }
     reset(): void {
         this.paused = true;
@@ -115,11 +113,10 @@ export class Timer {
     }
 
     tick(currentTime: number = Date.now()) {
-        if (this.paused || this.currentElapsedTime >= this.duration) {
-            return;
-        }
 
-        this.currentElapsedTime = currentTime - this.startTime;
+        if(!this.paused && this.currentElapsedTime < this.duration) {
+            this.currentElapsedTime = currentTime - this.startTime;
+        }
 
         const nextStep = this.steps.find(step => {
             return this.currentElapsedTime >= step.begin && this.currentElapsedTime < step.begin + step.duration;
@@ -133,7 +130,7 @@ export class Timer {
         }
     }
 
-    private setCurrentElapsedTime(elapsed: number): void {
+    setCurrentElapsedTime(elapsed: number): void {
         this.currentElapsedTime = elapsed;
         this.startTime = Date.now() - elapsed;
         this.tick();

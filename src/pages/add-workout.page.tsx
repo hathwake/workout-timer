@@ -30,8 +30,9 @@ export const AddWorkoutPage: React.FC = () => {
         return new WorkoutStorage();
     }, []);
 
-    const onFinish = (workout: Workout) => {
-        workoutStorage.create(workout).then(() => {
+    const onFinish = () => {
+        const finalWorkout = workoutForm.getFieldsValue(true);
+        workoutStorage.create(finalWorkout).then(() => {
             navigate("/home");
         }).catch((e) => {
             notification.error({

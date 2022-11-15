@@ -6,7 +6,7 @@ import { EditPlan } from "./plan.editor";
 export interface EditWorkoutProps<W extends Workout> {
     form: FormInstance<W>
     onCancel: () => void;
-    onFinish: (workout: W) => void;
+    onFinish: (workout: Partial<W>) => void;
 
     submitText?: string;
     cancelText?: string;

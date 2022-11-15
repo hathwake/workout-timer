@@ -3,22 +3,22 @@ import { Exercise, Workout } from "./workout.type";
 export type TimerStep = {
     name: string;
     begin: number;
-    length: number;
+    duration: number;
 }
 
 const buildExerciseSteps = (begin: number, exercise: Exercise): TimerStep[] => {
-    const steps = [
+    const steps: TimerStep[] = [
         {
             begin,
-            length: exercise.duration,
+            duration: exercise.duration * 1000,
             name: exercise.name
         }
     ];
-    console.log();
+    
     if(exercise.pause) {
         steps.push({
             begin: begin + exercise.duration * 1000,
-            length: exercise.pause,
+            duration: exercise.pause * 1000,
             name: "Pause"
         });
     }
@@ -30,7 +30,6 @@ const buildList = (begin: number, list: Workout["plan"]): TimerStep[] => {
     const steps: TimerStep[] = [];
 
     list.forEach((item, index) => {
-        console.log(begin);
         let itemSteps: TimerStep[] = [];
 
         if(item.type === "ex") {
@@ -38,7 +37,7 @@ const buildList = (begin: number, list: Workout["plan"]): TimerStep[] => {
         }
 
         if(itemSteps.length > 0) {
-            itemSteps.forEach(step => begin += step.length);
+            itemSteps.forEach(step => begin += step.duration);
 
             steps.push(...itemSteps);
         }
@@ -56,57 +55,87 @@ const buildSteps = (workout: Workout): TimerStep[] => {
 
 export class Timer {
     steps: TimerStep[] = [];
-    length = 0;
+    duration = 0;
 
     startTime = Date.now();
 
     currentElapsedTime = 0;
     currentStep: TimerStep | undefined;
 
-    paused = false;
+    paused = true;
     finished = false;
 
     constructor(workout: Workout) {
         this.steps = buildSteps(workout);
+        this.currentStep = this.steps[0];
+        this.duration = this.steps.reduce((prev, curr) => prev + curr.duration, 0);
 
-        console.log(this.steps);
+        this.tick();
 
-        this.tick(Date.now());
+        console.log("currentStep", this.currentStep);
     }
     reset(): void {
-        this.startTime = Date.now();
-        this.currentElapsedTime = 0;
-        this.paused = false;
-        this.finished = false;
-
-        this.tick(Date.now());
-    }
-
-    pause(): void {
         this.paused = true;
+        this.setCurrentElapsedTime(0);
+
+        this.tick();
     }
 
-    unpause(): void {
-        this.startTime = Date.now() - this.currentElapsedTime;
-        this.paused = false;
-        this.tick(Date.now());
+    togglePause(): void {
+        if(!this.paused) {
+            this.paused = true;
+        } else {
+            this.setCurrentElapsedTime(this.currentElapsedTime);
+            this.paused = false;
+        }
     }
 
-    tick(currentTime: number) {
-        if (this.paused || this.finished) {
+    skipCurrentStep(): void {
+        if(this.currentStep) {
+            this.setCurrentElapsedTime(this.currentStep.begin + this.currentStep.duration);
+        }
+    }
+
+    resetCurrentStep(): void {
+        if(this.currentStep) {
+            this.setCurrentElapsedTime(this.currentStep.begin);
+        }
+    }
+
+    goBack(): void {
+        if(this.currentStep) {
+            const index = this.steps.indexOf(this.currentStep);
+            if(index > 0) {
+                this.currentStep = this.steps[index - 1];
+                this.setCurrentElapsedTime(this.currentStep.begin);
+            } else {
+                this.resetCurrentStep();
+            }
+        }
+    }
+
+    tick(currentTime: number = Date.now()) {
+        if (this.paused || this.currentElapsedTime >= this.duration) {
             return;
         }
 
         this.currentElapsedTime = currentTime - this.startTime;
 
-        this.currentStep = this.steps.find(step => {
-            return this.currentElapsedTime >= step.begin && this.currentElapsedTime < step.begin + step.length;
+        const nextStep = this.steps.find(step => {
+            return this.currentElapsedTime >= step.begin && this.currentElapsedTime < step.begin + step.duration;
         });
 
-        if (this.currentStep === undefined) {
+        if (nextStep === undefined) {
             this.finished = true;
         } else {
             this.finished = false;
+            this.currentStep = nextStep;
         }
+    }
+
+    private setCurrentElapsedTime(elapsed: number): void {
+        this.currentElapsedTime = elapsed;
+        this.startTime = Date.now() - elapsed;
+        this.tick();
     }
 }

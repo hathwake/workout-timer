@@ -24,8 +24,10 @@ export const EditWorkoutPage: React.FC = () => {
         return new WorkoutStorage();
     }, []);
 
-    const onFinish = (workout: WorkoutId) => {
-        workoutStorage.store(workout).then(() => {
+    const onFinish = () => {
+        const finalWorkout = workoutForm.getFieldsValue(true);
+        
+        workoutStorage.store(finalWorkout).then(() => {
             navigate("/home");
         }).catch((e) => {
             notification.error({

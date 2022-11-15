@@ -1,31 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { WorkoutId } from "../data/workout.type";
-import { Button, Checkbox, Empty, List } from "antd";
+import { Button, Empty, List, Popconfirm } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { reactIf } from "../directives/if";
+import { useNavigate } from "react-router-dom";
 
 
 export interface WorkoutListProps {
     workouts: WorkoutId[];
-    markedIds?: string[];
-    onWorkoutMarked?: (id: string, checked: boolean) => void;
     onAddWorkout?: () => void;
 }
 
-export const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, markedIds, onWorkoutMarked, onAddWorkout }) => {
+export const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, onAddWorkout }) => {
+    const [markedIds, setMarkedIds] = useState<string[]>([]);
+
+    const navigate = useNavigate();
+
+    const sortedWorkouts = workouts.sort((a, b) => b.lastOpened - a.lastOpened);
+    
     const addIcon = <PlusCircleOutlined style={{ color: "green" }} />;
+
+    const handleOnItemClick = (w: WorkoutId) => {
+        navigate(`/timer/${w.id}`);
+    };
+
+    const handleOnEditItem = (w: WorkoutId) => {
+        navigate(`/workouts/edit/${w.id}`);
+    };
+
+    const handleOnRemoveItem = (w: WorkoutId) => {
+        navigate(`/workouts/edit/${w.id}`);
+    };
 
     return <>
         <List>
             {
-                workouts.map(w => {
-                    return <List.Item>
-                        <Checkbox checked={markedIds?.includes(w.id)} onChange={(e) => onWorkoutMarked?.(w.id, e.target.checked)}></Checkbox>
-                        {w.id}
+                sortedWorkouts.map(w => {
+                    const actions: React.ReactNode[] = [
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <Popconfirm title="are you sure?" onConfirm={(e) => handleOnRemoveItem(w)}>
+                                <Button danger type="link" onClick={(e) => e.stopPropagation()}>Remove</Button>
+                            </Popconfirm>
+                            <Button type="link" onClick={(e) => handleOnEditItem(w)}>Edit</Button>
+                        </div>
+                    ];
+
+                    return <List.Item actions={actions} style={{cursor: "pointer"}} onClick={() => handleOnItemClick(w)}>
+                        {w.name}
                     </List.Item>;
                 })
             }
-
-            <Empty></Empty>
+            {
+                reactIf(sortedWorkouts.length <= 0,
+                    <Empty></Empty>
+                )
+            }
         </List>
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
             <Button icon={addIcon} onClick={onAddWorkout}>Add</Button>

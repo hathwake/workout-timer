@@ -1,28 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { EditWorkout } from "../components/editors/workout.editor";
 import { WorkoutStorage } from "../data/workout.storage";
-import { Workout } from "../data/workout.type";
+import { Workout, WorkoutId } from "../data/workout.type";
 import { Form, notification } from "antd";
 
-export const AddWorkoutPage: React.FC = () => {
-    const [defaultWorkout] = useState<Workout>({
-        name: "hello",
-        lastOpened: Date.now(),
-        plan: [
-            {
-                type: "ex",
-                duration: 30.0,
-                name: "Push-Ups"
-            }
-        ]
-    });
+export interface EditWorkoutPageData {
+    workout: WorkoutId;
+}
+
+export const EditWorkoutPage: React.FC = () => {
+    const { workout } = useLoaderData() as EditWorkoutPageData;
 
     const [workoutForm] = Form.useForm();
 
     useEffect(() => {
-        workoutForm.setFieldsValue(defaultWorkout);
-    }, [defaultWorkout, workoutForm]);
+        workoutForm.setFieldsValue(workout);
+    }, [workout, workoutForm]);
 
     const navigate = useNavigate();
     
@@ -30,8 +24,8 @@ export const AddWorkoutPage: React.FC = () => {
         return new WorkoutStorage();
     }, []);
 
-    const onFinish = (workout: Workout) => {
-        workoutStorage.create(workout).then(() => {
+    const onFinish = (workout: WorkoutId) => {
+        workoutStorage.store(workout).then(() => {
             navigate("/home");
         }).catch((e) => {
             notification.error({
@@ -45,7 +39,7 @@ export const AddWorkoutPage: React.FC = () => {
     };
 
     return <>
-        <h1>Add Workout</h1>
+        <h1>Edit Workout</h1>
         <EditWorkout form={workoutForm} onFinish={onFinish} onCancel={onCancel}/>
     </>;
 };

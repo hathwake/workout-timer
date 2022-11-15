@@ -6,7 +6,3 @@ export class WorkoutStorage extends LocalStorage<WorkoutId> {
         super("workout");
     }
 }
-
-export const useWorkoutStorage = () => {
-    return new WorkoutStorage();
-};

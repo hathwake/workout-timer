@@ -19,6 +19,7 @@ export interface Repetition {
 
 export interface Workout {
     name: string;
+    lastOpened: number;
     plan: (Exercise | Repetition)[]
 }
 

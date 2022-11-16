@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { Timer, TimerStep } from "../../data/timer";
-import { CircularProgressbar } from "./circular-progressbar";
+import { CircularProgressbar } from "./circular-progressbar-v1";
 import {
     PlayCircleOutlined,
     PauseCircleOutlined,
@@ -43,8 +43,8 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     }, [timer]);
 
     const stepTime = currentStep ? elapsedTime - currentStep.begin : 0;
-    const stepProgress = currentStep ? (stepTime) / currentStep.duration : 0;
-    const totalProgress = elapsedTime / duration;
+    const stepProgress = currentStep && currentStep.duration > 0 ? (stepTime) / currentStep.duration : 0;
+    const totalProgress = duration > 0 ? elapsedTime / duration : 0;
 
     const stackStyles: React.CSSProperties = {
         position: "absolute",
@@ -68,6 +68,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
                 outerProgress={totalProgress}
                 padding={5}
                 strokeWidth={25}
+                radius={100}
             />
 
             <div style={{ ...stackStyles, width: "fit-content", textAlign: "center" }}>

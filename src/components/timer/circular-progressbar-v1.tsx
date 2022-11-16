@@ -1,4 +1,4 @@
-import "./circular-progressbar.css";
+import "./circular-progressbar-v1.css";
 
 
 export interface CircularProgressbarProps {
@@ -10,6 +10,7 @@ export interface CircularProgressbarProps {
     outerGradient?: [string, string];
     gradientPrefix?: string;
     padding?: number;
+    radius: number;
 }
 
 export const CircularProgressbar: React.FC<CircularProgressbarProps> = (props) => {
@@ -22,12 +23,12 @@ export const CircularProgressbar: React.FC<CircularProgressbarProps> = (props) =
         outerGradient,
         gradientPrefix,
         padding,
+        radius,
     } = props;
 
     innerProgress = Math.min(1, Math.max(0, innerProgress));
     outerProgress = Math.min(1, Math.max(0, outerProgress));
 
-    const radius = 100;
     const viewportSize = 2 * radius + 2 * strokeWidth;
 
     const viewBox = `0 0 ${viewportSize} ${viewportSize}`;
@@ -62,13 +63,13 @@ export const CircularProgressbar: React.FC<CircularProgressbarProps> = (props) =
             style={{ transform: "rotate(-90deg)" }}
         >
             <defs>
-                <linearGradient id={innerGradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color={innerGradient?.[0] ?? defaultColor} />
-                    <stop offset="100%" stop-color={innerGradient?.[1] ?? defaultColor} />
+                <linearGradient id={innerGradientId}>
+                    <stop offset="0%" stopColor={innerGradient?.[0] ?? defaultColor} />
+                    <stop offset="100%" stopColor={innerGradient?.[1] ?? defaultColor} />
                 </linearGradient>
-                <linearGradient id={outerGradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color={outerGradient?.[0] ?? defaultColor} />
-                    <stop offset="100%" stop-color={outerGradient?.[1] ?? defaultColor} />
+                <linearGradient id={outerGradientId}>
+                    <stop offset="0%" stopColor={outerGradient?.[0] ?? defaultColor} />
+                    <stop offset="100%" stopColor={outerGradient?.[1] ?? defaultColor} />
                 </linearGradient>
             </defs>
 

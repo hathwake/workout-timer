@@ -35,7 +35,7 @@ export const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, onAddWorkout
     return <>
         <List>
             {
-                sortedWorkouts.map(w => {
+                sortedWorkouts.map((w, index) => {
                     const actions: React.ReactNode[] = [
                         <div onClick={(e) => e.stopPropagation()}>
                             <Popconfirm title="are you sure?" onConfirm={(e) => handleOnRemoveItem(w)}>
@@ -45,7 +45,7 @@ export const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, onAddWorkout
                         </div>
                     ];
 
-                    return <List.Item actions={actions} style={{cursor: "pointer"}} onClick={() => handleOnItemClick(w)}>
+                    return <List.Item key={index} actions={actions} style={{cursor: "pointer"}} onClick={() => handleOnItemClick(w)}>
                         {w.name}
                     </List.Item>;
                 })

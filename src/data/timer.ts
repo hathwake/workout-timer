@@ -4,6 +4,7 @@ export type TimerStep = {
     name: string;
     begin: number;
     duration: number;
+    isPause?: boolean;
 }
 
 const buildExerciseSteps = (begin: number, exercise: Exercise): TimerStep[] => {
@@ -19,7 +20,8 @@ const buildExerciseSteps = (begin: number, exercise: Exercise): TimerStep[] => {
         steps.push({
             begin: begin + exercise.duration * 1000,
             duration: exercise.pause * 1000,
-            name: "Pause"
+            name: "Rest",
+            isPause: true,
         });
     }
 
@@ -188,5 +190,13 @@ export class Timer {
         return {
             unsubscribe: () => this.updateListeners.delete(func)
         };
+    }
+
+    getNumberOfSteps(): number {
+        return this.steps.length;
+    }
+
+    getNumberOfCurrentStep(): number {
+        return this.currentStep ? this.steps.indexOf(this.currentStep) : -1;
     }
 }

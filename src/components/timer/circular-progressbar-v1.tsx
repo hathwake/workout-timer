@@ -79,6 +79,7 @@ export const CircularProgressbar: React.FC<CircularProgressbarProps> = (props) =
                 r={outerRadius}
                 strokeWidth={strokeWidth}
                 stroke={`url(#${outerGradientId}`}
+                strokeLinecap="round"
             ></circle>
 
             <circle style={{ ...innerVariablesStyle, }}
@@ -87,6 +88,7 @@ export const CircularProgressbar: React.FC<CircularProgressbarProps> = (props) =
                 r={innerRadius}
                 strokeWidth={strokeWidth}
                 stroke={`url(#${innerGradientId}`}
+                strokeLinecap="round"
             ></circle>
         </svg>
     </div>;

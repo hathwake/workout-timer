@@ -17,7 +17,7 @@ export const TimerPage: React.FC<{}> = () => {
 
 
     return <>
-        <h1>Timer: {workout.name}</h1>
+        <h1>{workout.name}</h1>
 
         <TimerDisplay timer={timer} />
     </>;

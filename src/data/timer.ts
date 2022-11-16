@@ -65,6 +65,10 @@ export class Timer {
     paused = true;
     finished = false;
 
+    currentAnimationFrame: any = undefined;
+
+    private updateListeners = new Set<VoidFunction>();
+
     constructor(workout: Workout) {
         this.steps = buildSteps(workout);
         this.currentStep = this.steps[0];
@@ -76,16 +80,47 @@ export class Timer {
         this.paused = true;
         this.setCurrentElapsedTime(0);
 
-        this.tick();
+        this.pause();
+    }
+
+    private startTimer(): void {
+        this.setCurrentElapsedTime(this.currentElapsedTime);
+        this.paused = false;
+
+        if(!this.currentAnimationFrame) {
+            this.currentAnimationFrame = requestAnimationFrame(() => {
+                this.currentAnimationFrame = undefined;
+                this.tick();
+                this.startTimer();
+            });
+        }
+    }
+
+    private stopTimer(): void {
+        this.paused = true;
+
+        cancelAnimationFrame(this.currentAnimationFrame);
+        this.currentAnimationFrame = undefined;
     }
 
     togglePause(): void {
         if(!this.paused) {
-            this.paused = true;
+            this.pause();
         } else {
-            this.setCurrentElapsedTime(this.currentElapsedTime);
-            this.paused = false;
+            this.start();
         }
+    }
+
+    pause(): void {
+        this.stopTimer();
+
+        this.emitUpdate();
+    }
+
+    start(): void {
+        this.startTimer();
+
+        this.emitUpdate();
     }
 
     skipCurrentStep(): void {
@@ -112,21 +147,24 @@ export class Timer {
         }
     }
 
-    tick(currentTime: number = Date.now()) {
-
-        if(!this.paused && this.currentElapsedTime < this.duration) {
-            this.currentElapsedTime = currentTime - this.startTime;
-        }
-
-        const nextStep = this.steps.find(step => {
-            return this.currentElapsedTime >= step.begin && this.currentElapsedTime < step.begin + step.duration;
-        });
-
-        if (nextStep === undefined) {
-            this.finished = true;
-        } else {
-            this.finished = false;
-            this.currentStep = nextStep;
+    private tick(currentTime: number = Date.now()) {
+        try {
+            if(!this.paused && this.currentElapsedTime < this.duration) {
+                this.currentElapsedTime = currentTime - this.startTime;
+            }
+    
+            const nextStep = this.steps.find(step => {
+                return this.currentElapsedTime >= step.begin && this.currentElapsedTime < step.begin + step.duration;
+            });
+    
+            if (nextStep === undefined) {
+                this.finished = true;
+            } else {
+                this.finished = false;
+                this.currentStep = nextStep;
+            }
+        } finally {
+            this.emitUpdate();
         }
     }
 
@@ -134,5 +172,21 @@ export class Timer {
         this.currentElapsedTime = elapsed;
         this.startTime = Date.now() - elapsed;
         this.tick();
+    }
+
+    private emitUpdate(): void {
+        for(const func of this.updateListeners) {
+            func();
+        }
+    }
+
+    onUpdate(func: VoidFunction): {unsubscribe: VoidFunction} {
+        this.updateListeners.add(func);
+        
+        func();
+
+        return {
+            unsubscribe: () => this.updateListeners.delete(func)
+        };
     }
 }

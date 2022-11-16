@@ -22,43 +22,29 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     const [finished, setFinished] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(false);
 
-    const [currentTime, setCurrentTime] = useState(Date.now());
+    // const [currentTime, setCurrentTime] = useState(Date.now());
 
     useEffect(() => {
         timer.setCurrentElapsedTime(timer.duration / 2);
     }, [timer]);
 
     useEffect(() => {
-        timer.tick(currentTime);
-
-        setElapsedTime(timer.currentElapsedTime);
-        setDuration(timer.duration);
-        setCurrentStep(timer.currentStep);
-        setFinished(timer.finished);
-        setPaused(timer.paused);
-
-    }, [currentTime, timer]);
-
-    useEffect(() => {
-        let currentAnimationFrame: any = undefined;
-
-        const func = () => {
-            setCurrentTime(Date.now());
-
-            currentAnimationFrame = requestAnimationFrame(() => func());
-        };
-
-        currentAnimationFrame = requestAnimationFrame(() => func());
+        const update = timer.onUpdate(() => {
+            setElapsedTime(timer.currentElapsedTime);
+            setDuration(timer.duration);
+            setCurrentStep(timer.currentStep);
+            setFinished(timer.finished);
+            setPaused(timer.paused);
+        });
 
         return () => {
-            cancelAnimationFrame(currentAnimationFrame);
+            update.unsubscribe();
         };
-    });
+    }, [timer]);
 
-    let stepProgress = 0.0;
-    if (currentStep) {
-        stepProgress = (elapsedTime - currentStep.begin) / currentStep.duration;
-    }
+    const stepTime = currentStep ? elapsedTime - currentStep.begin : 0;
+    const stepProgress = currentStep ? (stepTime) / currentStep.duration : 0;
+    const totalProgress = elapsedTime / duration;
 
     const stackStyles: React.CSSProperties = {
         position: "absolute",
@@ -69,24 +55,25 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     };
 
     return <>
-        <h1>{(elapsedTime / 1000).toFixed(0)}s of {(duration / 1000).toFixed(0)}s</h1>
         <span>Timer state: {finished ? "finished" : paused ? "paused" : "running"}</span>
         <div>current step: {currentStep?.name}</div>
 
-        {/* <div>
-            <Button disabled={timer.finished} onClick={() => timer.togglePause()}>{timer.paused ? "Start" : "Pause"}</Button>
-            <Button onClick={() => timer.goBack()}>Go back</Button>
-            <Button onClick={() => timer.skipCurrentStep()}>Skip Step</Button>
-            <Button onClick={() => timer.resetCurrentStep()}>Reset Step</Button>
-            <Button onClick={() => timer.reset()}>Reset</Button>
-        </div> */}
+        <div style={{ position: "relative", width: "100%", aspectRatio: "1" }}>
+            <CircularProgressbar
+                gradientPrefix="timer"
+                innerGradient={["#AA6DA3", "#B118C8"]}
+                outerGradient={["#6A5D7B", "#5D4A66"]}
+                style={{ ...stackStyles }}
+                innerProgress={stepProgress}
+                outerProgress={totalProgress}
+                padding={5}
+                strokeWidth={25}
+            />
 
-        <div style={{ position: "relative", width: "80vw", height: "80vw" }}>
-            <CircularProgressbar style={{ ...stackStyles }} progress={elapsedTime / duration} strokeWidth={25} />
-            <CircularProgressbar style={{ ...stackStyles, width: "75%" }} progress={stepProgress} strokeWidth={25} />
-
-            <div style={{...stackStyles, width: "fit-content", textAlign: "center"}}>
-                {(elapsedTime / 1000).toFixed(0)}s of {(duration / 1000).toFixed(0)}
+            <div style={{ ...stackStyles, width: "fit-content", textAlign: "center" }}>
+                <span style={{fontSize: "3em", fontFamily: "monospace"}}>{(stepTime / 1000).toFixed(0)}s</span>
+                {/* <br/> */}
+                {/* <span style={{fontSize: "2em", fontWeight: "bold"}}>{currentStep?.name}</span> */}
             </div>
         </div>
 

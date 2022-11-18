@@ -13,6 +13,5 @@ svg.progress-bar circle {
     fill: none;
     stroke-dasharray: var(--circumference);
     stroke-dashoffset: calc(var(--circumference) * (1 - var(--progress)));
-    transition: stroke-dashoffset 0.01s;
-    transition-timing-function: step-end;
+    /* transition: stroke-dashoffset 0.3s; */
 }

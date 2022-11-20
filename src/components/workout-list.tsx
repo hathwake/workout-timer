@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { WorkoutId } from "../data/workout.type";
-import { Button, Empty, List, notification, Popconfirm } from "antd";
+import { Button, Empty, List, Popconfirm } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { reactIf } from "../directives/if";
 import { useNavigate } from "react-router-dom";
-import { WorkoutStorage } from "../data/workout.storage";
 
 
 export interface WorkoutListProps {

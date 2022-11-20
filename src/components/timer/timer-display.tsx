@@ -1,4 +1,4 @@
-import { Button, List } from "antd";
+import { Button, Divider, List, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { Timer, TimerStep } from "../../data/timer";
 import { CircularProgressbar } from "./circular-progressbar-v1";
@@ -76,7 +76,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     }
 
     return <>
-        <div style={{display: "flex", justifyContent: "center"}}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{ position: "relative", flexShrink: 0, flexGrow: 0, width: "max(40vh, 300px)", aspectRatio: "1" }}>
                 <CircularProgressbar
                     gradientPrefix="timer"
@@ -104,10 +104,21 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
                 </div>
             </div>
         </div>
+        
+        <Tooltip title={currentStep?.name}>
+            <div style={{
+                fontSize: "2em",
+                textAlign: "center",
+                fontFamily: "monospace",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+            }}>
+                {currentStep?.name}
+            </div>
+        </Tooltip>
 
-        <h1 style={{ textAlign: "center", fontFamily: "monospace", borderBottom: "1px solid lightgrey", whiteSpace: "nowrap" }}>
-            {currentStep?.name}
-        </h1>
+        <Divider type="horizontal" style={{margin: "12px 0px"}}></Divider>
 
         <div style={{
             display: "flex",
@@ -117,10 +128,6 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
             flexDirection: "row",
             gap: "10px"
         }}>
-            <TimerActionButton onClick={() => timer.resetCurrentStep()}>
-                <FastBackwardOutlined />
-            </TimerActionButton>
-
             <TimerActionButton onClick={() => timer.goBack()}>
                 <StepBackwardOutlined />
             </TimerActionButton>
@@ -136,18 +143,22 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
             <TimerActionButton onClick={() => timer.skipCurrentStep()}>
                 <StepForwardOutlined />
             </TimerActionButton>
-
-            <TimerActionButton onClick={() => timer.reset()}>
-                <RollbackOutlined />
-            </TimerActionButton>
         </div>
+
+        <div style={{ display: "flex", flexDirection: "row" }}>
+            <Button type="link" onClick={() => timer.resetCurrentStep()}>Reset Exercise</Button>
+            <div style={{ flexGrow: 1 }}></div>
+            <Button type="link" onClick={() => timer.reset()}>Reset Timer</Button>
+        </div>
+
+        <Divider type="horizontal" style={{margin: "12px 0px"}}></Divider>
 
         <h1>Coming next:</h1>
         <List>
             {
                 timer.steps.slice(timer.getNumberOfCurrentStep() + 1).map((step, index) => {
                     return <List.Item key={index}>
-                        <span style={{display: "inline-block", minWidth: "50px", fontFamily: "monospace"}}>
+                        <span style={{ display: "inline-block", minWidth: "50px", fontFamily: "monospace" }}>
                             {Math.round(step.duration / 1000)}s
                         </span>
                         {step.name}

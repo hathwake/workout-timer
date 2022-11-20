@@ -3,7 +3,7 @@ import {Button, Card, Divider, notification} from "antd";
 import {WorkoutList} from "../components/workout-list";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import {WorkoutId} from "../data/workout.type";
-import { WorkoutStorage } from "../data/workout.storage";
+import { WorkoutStorage } from "../data/storage/workout.storage";
 
 export interface HomeLoaderData {
     workouts: WorkoutId[];

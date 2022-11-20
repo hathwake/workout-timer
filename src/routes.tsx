@@ -1,7 +1,7 @@
 import React from "react";
 import { HomePage, HomeLoaderData } from "./pages/home.page";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { WorkoutStorage } from "./data/workout.storage";
+import { WorkoutStorage } from "./data/storage/workout.storage";
 import { NotFoundPage } from "./pages/not-found.page";
 import { AddWorkoutPage } from "./pages/add-workout.page";
 import { AppMainLayout } from "./pages/main-layout.page";

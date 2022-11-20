@@ -161,6 +161,7 @@ export class Timer {
     
             if (nextStep === undefined) {
                 this.finished = true;
+                this.pause();
             } else {
                 this.finished = false;
                 this.currentStep = nextStep;

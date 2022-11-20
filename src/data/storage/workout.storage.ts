@@ -1,8 +1,8 @@
 import { LocalStorage } from "./local.storage";
-import {WorkoutId} from "./workout.type";
+import {WorkoutId} from "../workout.type";
 
 export class WorkoutStorage extends LocalStorage<WorkoutId> {
     constructor() {
-        super("workout");
+        super("v1:workout");
     }
 }

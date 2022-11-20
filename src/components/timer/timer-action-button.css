@@ -1,12 +1,13 @@
 button.timer-action-btn {
+    --btn-height: 70px;
     background: none;
     aspect-ratio: 1;
     border-radius: 50%;
     flex-shrink: 0;
     flex-grow: 0;
     overflow: hidden;
-    font-size: 25px;
-    height: 40px;
+    font-size: calc(0.5 * var(--btn-height));
+    height: var(--btn-height);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,11 +19,9 @@ button.timer-action-btn {
 }
 
 button.timer-action-btn.small {
-    font-size: 20px;
-    height: 30px;
+    --btn-height: 50px;
 }
 
 button.timer-action-btn.large {
-    font-size: 30px;
-    height: 60px;
+    --btn-height: 100px;
 }

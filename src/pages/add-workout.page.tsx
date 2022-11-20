@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EditWorkout } from "../components/editors/workout.editor";
-import { WorkoutStorage } from "../data/workout.storage";
+import { WorkoutStorage } from "../data/storage/workout.storage";
 import { Workout } from "../data/workout.type";
 import { Form, notification } from "antd";
 

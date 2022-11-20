@@ -1,3 +1,4 @@
+import { Divider } from "antd";
 import { useMemo } from "react";
 import { useLoaderData } from "react-router-dom";
 import { TimerDisplay } from "../components/timer/timer-display";
@@ -18,6 +19,8 @@ export const TimerPage: React.FC<{}> = () => {
 
     return <>
         <h1>{workout.name}</h1>
+
+        <Divider type="horizontal" style={{margin: "12px 0px"}}></Divider>
 
         <TimerDisplay timer={timer} />
     </>;

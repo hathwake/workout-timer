@@ -77,4 +77,6 @@ export const routes = createBrowserRouter([
             }
         ]
     }
-]);
+], {
+    basename: "/workout-timer/"
+});

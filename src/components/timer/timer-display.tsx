@@ -42,9 +42,9 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     const animTotalProgress = useSmoothValue(totalProgress, smoothness);
     const animStepProgress = useSmoothValue(stepProgress, smoothness);
 
-    useEffect(() => {
-        timer.setCurrentElapsedTime(timer.duration / 2);
-    }, [timer]);
+    // useEffect(() => {
+    //     timer.setCurrentElapsedTime(timer.duration / 2);
+    // }, [timer]);
 
     useEffect(() => {
         const update = timer.onUpdate(() => {

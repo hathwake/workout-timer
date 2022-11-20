@@ -7,7 +7,7 @@ import { Form, notification } from "antd";
 
 export const AddWorkoutPage: React.FC = () => {
     const [defaultWorkout] = useState<Workout>({
-        name: "hello",
+        name: "Workout",
         lastOpened: Date.now(),
         plan: [
             {

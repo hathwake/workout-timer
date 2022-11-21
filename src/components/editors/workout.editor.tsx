@@ -1,6 +1,8 @@
-import { Button, Divider, Form, FormInstance, Input } from "antd";
+import { Divider, Form, FormInstance, Input } from "antd";
 import React, { useEffect } from "react";
 import { Workout } from "../../data/workout.type";
+import { Button } from "../ui/button";
+import { ButtonGroup } from "../ui/button-group";
 import { EditPlan } from "./plan.editor";
 
 export interface EditWorkoutProps<W extends Workout> {
@@ -31,10 +33,12 @@ export class EditWorkout<W extends Workout> extends React.Component<EditWorkoutP
                 <EditPlan></EditPlan>
 
                 <Form.Item wrapperCol={{ span: 24 }}>
-                    <Button.Group style={{ width: "100%" }}>
+                    {/* <Button.Group style={{ width: "100%" }}> */}
+                    {/* </Button.Group> */}
+                    <ButtonGroup>
                         <Button block={true} danger={true} onClick={this.props.onCancel}>{this.props.cancelText || "Cancel"}</Button>
                         <Button block={true} type="primary" htmlType="submit">{this.props.submitText || "Submit"}</Button>
-                    </Button.Group>
+                    </ButtonGroup>
                 </Form.Item>
             </Form>
         </>;

@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from "react";
-import {Button, Card, Divider, notification} from "antd";
+import {Card, Divider, notification} from "antd";
 import {WorkoutList} from "../components/workout-list";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import {WorkoutId} from "../data/workout.type";
 import { WorkoutStorage } from "../data/storage/workout.storage";
+import { ButtonGroup } from "../components/ui/button-group";
+import { Button } from "../components/ui/button";
 
 export interface HomeLoaderData {
     workouts: WorkoutId[];
@@ -39,6 +41,7 @@ export const HomePage: React.FC = () => {
         <h1>Home</h1>
         
         <Divider type="horizontal">Workouts</Divider>
+
         <WorkoutList workouts={workouts} onAddWorkout={onAddWorkout} onRemoveWorkout={onRemoveWorkout}></WorkoutList>
     </>;
 };

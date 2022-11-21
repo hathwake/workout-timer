@@ -1,7 +1,7 @@
-import { Button, Divider, List, Tooltip } from "antd";
-import { useEffect, useState } from "react";
+import { Divider, List, Tooltip } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import { Timer, TimerStep } from "../../data/timer";
-import { CircularProgressbar } from "./circular-progressbar-v1";
+import { CircularProgressbar } from "./circular-progressbar";
 import {
     PlayCircleOutlined,
     PauseCircleOutlined,
@@ -13,16 +13,12 @@ import {
 import { reactIf } from "../../directives/if";
 import { TimerActionButton } from "./timer-action-button";
 import { useSmoothValue } from "./smooth-value";
+import { Button } from "../ui/button";
+import { useAudioPlayer } from "./audio-player";
 
 export interface TimerDisplayProps {
     timer: Timer;
 }
-
-const round = (val: number, digits: number) => {
-    const power = Math.pow(10, digits);
-
-    return Math.round(val * power) / power;
-};
 
 export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -33,34 +29,51 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     const [finished, setFinished] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(true);
 
+    const audioCountdownStep = useAudioPlayer("assets/countdown_step.mp3");
+    const audioCountdownFinished = useAudioPlayer("assets/countdown_finished.mp3");
+    
+    const [lastFullSecond, setLastFullSecond] = useState<number>(Math.floor(elapsedTime / 1000));
+    const currentFullSecond = Math.floor(elapsedTime / 1000);
+
+    if(currentFullSecond !== lastFullSecond) {
+        setLastFullSecond(currentFullSecond);
+
+        const timeUntilNext = currentStep ? (currentStep.begin / 1000 + currentStep.duration / 1000) - currentFullSecond : -1;
+
+        // if(timeUntilNext < 4 && timeUntilNext >= 0) {
+        //     audioCountdownStep.play(0);
+        // }
+    }
+
     const stepTime = currentStep ? elapsedTime - currentStep.begin : 0;
     const stepProgress = currentStep ? stepTime / currentStep.duration : 0;
     const totalProgress = duration > 0 ? elapsedTime / duration : 1;
 
     const smoothness = 0.1;
 
-    const animTotalProgress = useSmoothValue(totalProgress, smoothness);
-    const animStepProgress = useSmoothValue(stepProgress, smoothness);
-
-    // useEffect(() => {
-    //     timer.setCurrentElapsedTime(timer.duration / 2);
-    // }, [timer]);
+    const animTotalProgress = useSmoothValue(elapsedTime === 0 ? 1.0 : totalProgress, smoothness);
+    const animStepProgress = useSmoothValue(elapsedTime === 0 ? 1.0 : stepProgress, smoothness);
 
     useEffect(() => {
+
         const update = timer.onUpdate(() => {
+            // if(!timer.paused && timer.currentStep !== currentStep) {
+            //     audioCountdownFinished.play(0);
+            // }
+
             setElapsedTime(timer.currentElapsedTime);
             setDuration(timer.duration);
             setCurrentStep(timer.currentStep);
             setNumberOfSteps(timer.getNumberOfSteps());
             setNumberOfCurrentStep(timer.getNumberOfCurrentStep());
             setFinished(timer.finished);
-            setPaused(timer.paused);
+            setPaused(timer.paused);            
         });
 
         return () => {
             update.unsubscribe();
         };
-    }, [timer]);
+    }, [timer, audioCountdownFinished, currentStep]);
 
     const stackStyles: React.CSSProperties = {
         position: "absolute",
@@ -77,14 +90,14 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
 
     return <>
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ position: "relative", flexShrink: 0, flexGrow: 0, width: "max(40vh, 300px)", aspectRatio: "1" }}>
+            <div style={{ position: "relative", flexShrink: 0, flexGrow: 0, width: "max(30vh, 300px)", aspectRatio: "1" }}>
                 <CircularProgressbar
                     gradientPrefix="timer"
                     innerGradient={innerGradientColors}
                     outerGradient={["#6A5D7B", "#5D4A66"]}
                     style={{ ...stackStyles }}
-                    innerProgress={elapsedTime === 0 ? 1 : animStepProgress}
-                    outerProgress={elapsedTime === 0 ? 1 : animTotalProgress}
+                    innerProgress={animStepProgress}
+                    outerProgress={animTotalProgress}
                     padding={5}
                     strokeWidth={15}
                     radius={100}
@@ -96,7 +109,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
                             <span>REST</span><br />
                         </>
                     )}
-                    <span style={{ fontSize: "3em", fontFamily: "monospace" }}>{currentStep ? Math.round((elapsedTime - currentStep.begin) / 1000) : 0}s</span>
+                    <span style={{ fontSize: "3em", fontFamily: "monospace" }}>{currentStep ? ((elapsedTime - currentStep.begin) / 1000).toFixed(2) : 0}s</span>
                     <br />
                     <span>
                         {numberOfCurrentStep + 1}/{numberOfSteps}
@@ -105,18 +118,16 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
             </div>
         </div>
         
-        <Tooltip title={currentStep?.name}>
-            <div style={{
-                fontSize: "2em",
-                textAlign: "center",
-                fontFamily: "monospace",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-            }}>
-                {currentStep?.name}
-            </div>
-        </Tooltip>
+        <div title={currentStep?.name} style={{
+            fontSize: "2em",
+            textAlign: "center",
+            fontFamily: "monospace",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+        }}>
+            {currentStep?.name}
+        </div>
 
         <Divider type="horizontal" style={{margin: "12px 0px"}}></Divider>
 
@@ -128,27 +139,27 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
             flexDirection: "row",
             gap: "10px"
         }}>
-            <TimerActionButton onClick={() => timer.goBack()}>
+            <Button type="action" height="64px" onClick={() => timer.goBack()}>
                 <StepBackwardOutlined />
-            </TimerActionButton>
+            </Button>
 
-            <TimerActionButton size="large" disabled={finished} onClick={() => timer.togglePause()}>
+            <Button type="action" height="76px" disabled={finished} onClick={() => timer.togglePause()}>
                 {paused ?
                     <PlayCircleOutlined />
                     :
                     <PauseCircleOutlined />
                 }
-            </TimerActionButton>
+            </Button>
 
-            <TimerActionButton onClick={() => timer.skipCurrentStep()}>
+            <Button type="action" height="64px" onClick={() => timer.skipCurrentStep()}>
                 <StepForwardOutlined />
-            </TimerActionButton>
+            </Button>
         </div>
 
         <div style={{ display: "flex", flexDirection: "row" }}>
-            <Button type="link" onClick={() => timer.resetCurrentStep()}>Reset Exercise</Button>
+            <Button height="32px" type="link" onClick={() => timer.resetCurrentStep()}>Reset Exercise</Button>
             <div style={{ flexGrow: 1 }}></div>
-            <Button type="link" onClick={() => timer.reset()}>Reset Timer</Button>
+            <Button height="32px" type="link" onClick={() => timer.reset()}>Reset Timer</Button>
         </div>
 
         <Divider type="horizontal" style={{margin: "12px 0px"}}></Divider>

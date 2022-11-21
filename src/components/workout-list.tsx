@@ -1,9 +1,10 @@
 import React from "react";
 import { WorkoutId } from "../data/workout.type";
-import { Button, Empty, List, Popconfirm } from "antd";
+import { Empty, List, Popconfirm } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { reactIf } from "../directives/if";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
 
 
 export interface WorkoutListProps {

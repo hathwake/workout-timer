@@ -1,4 +1,4 @@
-import "./circular-progressbar-v1.css";
+import "./circular-progressbar.css";
 
 
 export interface CircularProgressbarProps {

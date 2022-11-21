@@ -1,0 +1,32 @@
+
+
+.ui-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.ui-button-group > .ui-button:not(:first-of-type) {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.ui-button-group > .ui-button:not(:first-of-type)::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--border-color);
+}
+
+.ui-button-group > .ui-button:not(:last-of-type) {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ui-button-group > .ui-button.ui-button-block {
+    width: auto;
+    flex-grow: 1;
+}

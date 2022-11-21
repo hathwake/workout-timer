@@ -8,7 +8,7 @@ svg.progress-bar circle {
     /* from circle definition r=10 */
     --radius: 100;
     --pi: 3.1415;
-    --circumference: calc(2 * var(--pi) * var(--radius));
+    --circumference: calc(2px * var(--pi) * var(--radius));
 
     fill: none;
     stroke-dasharray: var(--circumference);

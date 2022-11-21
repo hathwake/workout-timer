@@ -1,9 +1,8 @@
-import { Button, Collapse, Divider, Form, FormListFieldData, FormListOperation, Popconfirm, Space } from "antd";
-import CollapsePanel from "antd/lib/collapse/CollapsePanel";
-import Operation from "antd/lib/transfer/operation";
+import { Collapse, Form, FormListFieldData, FormListOperation, Popconfirm, Space } from "antd";
 import React from "react";
 import { Exercise } from "../../data/workout.type";
 import { Sortable, SortableContentFunc } from "../dnd/sortable";
+import { Button } from "../ui/button";
 import { EditExercise } from "./exercise.editor";
 
 export const FormValueChild: React.FC<{ value?: any }> = ({ value }) => {
@@ -37,49 +36,54 @@ export const EditPlan: React.FC<{}> = () => {
             }) => {
 
 
-                const genCollapsExtra = (index: number) => {
+                const genCollapseExtra = (index: number) => {
                     const confirmRemove = () => {
                         operation.remove(index);
                     };
 
-                    return <>
-                        <span onClick={e => e.stopPropagation()}>
-                            <Popconfirm
-                                title="are you sure?"
-                                onConfirm={confirmRemove}
-                            >
-                                <Button type="link" size="small">
-                                    Remove
-                                </Button>
-                            </Popconfirm>
-                        </span>
-                    </>;
+                    return <span onClick={e => e.stopPropagation()}>
+                        <Popconfirm
+                            title="are you sure?"
+                            onConfirm={confirmRemove}
+                        >
+                            <Button type="link">
+                                Remove
+                            </Button>
+                        </Popconfirm>
+                    </span>;
                 };
 
-                const genPanel = (index: number, key: any, item: React.ReactNode, headerName: any, extra: React.ReactNode) => {
+                const genPanel = (index: number, item: React.ReactNode, headerName: any, extra: React.ReactNode) => {
                     const header = <FormValue name={[headerName, "name"]}></FormValue>;
 
+                    const extraNode = <span style={{whiteSpace: "nowrap"}}>{genCollapseExtra(index)}{extra}</span>;
+                    const headerNode = <span style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis"
+                    }}>{header}</span>;
+
                     return <Collapse>
-                        <CollapsePanel key={key} header={header} extra={[genCollapsExtra(index), extra]}>
+                        <Collapse.Panel key={0} header={headerNode} extra={extraNode}>
                             {item}
-                        </CollapsePanel>
+                        </Collapse.Panel>
                     </Collapse>;
                 };
 
-                const genItemPanel: SortableContentFunc = ({ item: field, index, dragHandle }) => {
-                    const type = form.getFieldValue(["plan", field.name, "type"]);
+                const genItemPanel: SortableContentFunc = ({ item, index, dragHandle }) => {
+                    const type = form.getFieldValue(["plan", item.name, "type"]);
 
-                    let item: React.ReactNode = undefined;
+                    let itemNode: React.ReactNode = undefined;
 
                     if (type === "ex") {
-                        item = <Form.Item {...field}>
+                        itemNode = <Form.Item {...item}>
                             <EditExercise></EditExercise>
                         </Form.Item>;
                     } else {
                         throw new Error("Unsupported item");
                     }
 
-                    return genPanel(index, field.key, item, field.name, [dragHandle]);
+                    return genPanel(index, itemNode, item.name, dragHandle);
                 };
 
                 return <>

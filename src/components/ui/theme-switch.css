@@ -1,0 +1,56 @@
+
+
+button.ui-theme-switch {
+    --transition-duration: 0.5s;
+    --transition-timing-function: ease-out;
+
+    cursor: pointer;
+    
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    /* font-size: 2em; */
+
+    width: fit-content;
+    height: 100%;
+}
+
+svg.ui-theme-switch {
+    width: 2em;
+    aspect-ratio: 1;
+    display: inline;
+    position: relative;
+}
+
+.moon-cutout {
+    transition-property: transform;
+    transition-duration: var(--transition-duration);
+    transition-timing-function: var(--transition-timing-function);
+
+    transform: translateX(0%);
+}
+
+button.ui-theme-switch[data-state=light] .moon-cutout {
+    transform: translate(100%, 0%);
+}
+
+
+.sun-beams {
+    transition-property: transform 1s, opacity 1s;
+    transition-duration: var(--transition-duration);
+    transition-timing-function: var(--transition-timing-function);
+
+    transform: scale(1.0);
+    opacity: 1;
+    transform-origin: 12px 12px;
+}
+button.ui-theme-switch[data-state=dark] .sun-beams {
+    transform: scale(0.0) rotate(180deg);
+    opacity: 0;
+}
+
+

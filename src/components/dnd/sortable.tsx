@@ -24,7 +24,6 @@ export type SortableMoveFunc = (from: number, to: number) => void;
 
 export const SortableItem: React.FC<{
     item: any,
-    key: number,
     genContent: (dragHandle: any) => React.ReactNode
 }> = (props) => {
     const {
@@ -45,7 +44,7 @@ export const SortableItem: React.FC<{
     </span>;
 
     return (
-        <div key={props.key} ref={setNodeRef} style={style}>
+        <div ref={setNodeRef} style={style}>
             {props.genContent(dragHandle)}
         </div>
     );

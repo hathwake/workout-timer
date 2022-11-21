@@ -1,0 +1,36 @@
+
+
+
+html {
+    --body-background: hsl(0, 0%, 90%);
+    --body-background-secondary: hsl(0, 0%, 100%);
+    --btn-background: #e1e1e1;
+    --btn-background-hover: #b6b6b6;
+    
+    --border-color: #dcdcdc;
+
+    --text-color: black;
+    --text-color-menu: rgb(0 0 0 / 85%);
+
+    /* general colors */
+    --primary: hsl(258deg 100% 60%);
+    --primary-hover: hsl(258deg 100% 70%);
+    --danger: hsl(0, 100%, 60%);
+    --danger-hover: hsl(0, 100%, 70%);
+
+    --link-color: hsl(223deg 100% 50% / 82%);;
+    --link-color-hover: hsl(221, 100%, 60%);
+}
+
+html.dark {
+    --body-background: hsla(0, 0%, 5%);
+    --body-background-secondary: hsl(0, 0%, 10%);
+    --btn-background: #292929;
+    --btn-background-hover: #444444;
+    
+    --border-color: #575757;
+
+    --text-color: white;
+    --text-color-menu: rgb(255 255 255 / 85%);
+
+}

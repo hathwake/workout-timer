@@ -1,0 +1,39 @@
+@import "../../node_modules/antd/dist/antd.css";
+/* @import "../../node_modules/antd/lib/layout/style/index.css";
+@import "../../node_modules/antd/lib/input/style/index.css";
+@import "../../node_modules/antd/lib/input-number/style/index.css";
+@import "../../node_modules/antd/lib/form/style/index.css";
+@import "../../node_modules/antd/lib/menu/style/index.css";
+@import "../../node_modules/antd/lib/list/style/index.css";
+@import "../../node_modules/antd/lib/divider/style/index.css";
+@import "../../node_modules/antd/lib/icon/style/index.css";
+@import "../../node_modules/antd/lib/notification/style/index.css";
+@import "../../node_modules/antd/lib/popconfirm/style/index.css";
+@import "../../node_modules/antd/lib/empty/style/index.css"; */
+
+
+.ant-layout-header {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+}
+
+.ant-layout {
+    background: transparent;
+}
+
+.ant-layout-content {
+    overflow: visible;
+}
+
+.ant-list-item {
+    color: var(--text-color);
+}
+
+.ant-layout-header, .ant-menu.ant-menu-dark {
+    background-color: var(--primary);
+}
+
+.ant-list-split .ant-list-item {
+    border-color: var(--border-color);
+}

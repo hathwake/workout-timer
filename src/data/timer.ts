@@ -70,6 +70,7 @@ export class Timer {
     currentAnimationFrame: any = undefined;
 
     private updateListeners = new Set<VoidFunction>();
+    private pausedListeners = new Set<(paused: boolean) => void>();
 
     constructor(workout: Workout) {
         this.steps = buildSteps(workout);
@@ -116,12 +117,14 @@ export class Timer {
     pause(): void {
         this.stopTimer();
 
+        this.emitPaused();
         this.emitUpdate();
     }
 
     start(): void {
         this.startTimer();
 
+        this.emitPaused();
         this.emitUpdate();
     }
 
@@ -183,6 +186,12 @@ export class Timer {
         }
     }
 
+    private emitPaused(): void {
+        for(const func of this.pausedListeners) {
+            func(this.paused);
+        }
+    }
+
     onUpdate(func: VoidFunction): {unsubscribe: VoidFunction} {
         this.updateListeners.add(func);
         
@@ -190,6 +199,16 @@ export class Timer {
 
         return {
             unsubscribe: () => this.updateListeners.delete(func)
+        };
+    }
+
+    onPausedChange(func: (paused: boolean) => void): {unsubscribe: VoidFunction} {
+        this.pausedListeners.add(func);
+        
+        func(this.paused);
+
+        return {
+            unsubscribe: () => this.pausedListeners.delete(func)
         };
     }
 

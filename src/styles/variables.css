@@ -18,8 +18,10 @@ html {
     --danger: hsl(0, 100%, 60%);
     --danger-hover: hsl(0, 100%, 70%);
 
-    --link-color: hsl(223deg 100% 50% / 82%);;
+    --link-color: hsl(223deg 100% 50% / 82%);
     --link-color-hover: hsl(221, 100%, 60%);
+
+    --border-radius: 15px;
 }
 
 html.dark {

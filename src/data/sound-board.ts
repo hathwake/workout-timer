@@ -1,0 +1,61 @@
+
+
+export type SoundBoardState<Keys extends string> = {
+    ctx: AudioContext,
+    buffers: Record<Keys, AudioBuffer>,
+}
+
+export class SoundBoard<Keys extends string> {
+
+    initializing = false;
+
+    state: SoundBoardState<Keys> | undefined;
+
+    constructor(private sounds: Record<Keys, ArrayBuffer>) {}
+
+    async createState(): Promise<SoundBoardState<Keys>> {
+        console.log("Creating SoundBoard");
+        const ctx = new AudioContext();
+
+        const buffers: Record<string, AudioBuffer> = {};
+
+        for(const [key, arrayBuffer] of Object.entries<ArrayBuffer>(this.sounds)) {
+            buffers[key] = await ctx.decodeAudioData(arrayBuffer);
+        }
+
+        return {
+            ctx,
+            buffers,
+        };
+    }
+
+    async initialize(): Promise<void> {
+        this.state = await this.createState();
+    }
+
+    // async getState(): Promise<SoundBoardState<Keys>> {
+    //     if(!this.state) {
+    //         this.state = await this.createState();
+    //     }
+
+    //     return this.state;
+    // }
+
+    async playSound(key: Keys, volume = 1): Promise<void> {
+        if(this.state === undefined) {
+            return;
+        }
+
+        const {ctx, buffers} = this.state;
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffers[key];
+        
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(volume, ctx.currentTime);
+        source.connect(gain);
+        gain.connect(ctx.destination);
+
+        source.start(ctx.currentTime);
+    }
+}

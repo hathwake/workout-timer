@@ -16,11 +16,15 @@ import { useSmoothValue } from "./smooth-value";
 import { Button } from "../ui/button";
 import { useAudioPlayer } from "./audio-player";
 
+export type TimerSound = "countdown_step" | "countdown_finished";
+export type PlaySoundCallback = (sound: TimerSound) => Promise<void>;
+
 export interface TimerDisplayProps {
     timer: Timer;
+    onPlaySound?: PlaySoundCallback;
 }
 
-export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
+export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer, onPlaySound }) => {
     const [elapsedTime, setElapsedTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [currentStep, setCurrentStep] = useState<TimerStep | undefined>(undefined);
@@ -28,9 +32,6 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     const [numberOfCurrentStep, setNumberOfCurrentStep] = useState<number>(0);
     const [finished, setFinished] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(true);
-
-    const audioCountdownStep = useAudioPlayer("assets/countdown_step.mp3");
-    const audioCountdownFinished = useAudioPlayer("assets/countdown_finished.mp3");
     
     const [lastFullSecond, setLastFullSecond] = useState<number>(Math.floor(elapsedTime / 1000));
     const currentFullSecond = Math.floor(elapsedTime / 1000);
@@ -40,9 +41,9 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
 
         const timeUntilNext = currentStep ? (currentStep.begin / 1000 + currentStep.duration / 1000) - currentFullSecond : -1;
 
-        // if(timeUntilNext < 4 && timeUntilNext >= 0) {
-        //     audioCountdownStep.play(0);
-        // }
+        if(timeUntilNext < 4 && timeUntilNext >= 0) {
+            onPlaySound?.("countdown_step");
+        }
     }
 
     const stepTime = currentStep ? elapsedTime - currentStep.begin : 0;
@@ -57,9 +58,9 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
     useEffect(() => {
 
         const update = timer.onUpdate(() => {
-            // if(!timer.paused && timer.currentStep !== currentStep) {
-            //     audioCountdownFinished.play(0);
-            // }
+            if(!timer.paused && timer.currentStep !== currentStep) {
+                onPlaySound?.("countdown_finished");
+            }
 
             setElapsedTime(timer.currentElapsedTime);
             setDuration(timer.duration);
@@ -73,7 +74,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer }) => {
         return () => {
             update.unsubscribe();
         };
-    }, [timer, audioCountdownFinished, currentStep]);
+    }, [timer, currentStep, onPlaySound]);
 
     const stackStyles: React.CSSProperties = {
         position: "absolute",

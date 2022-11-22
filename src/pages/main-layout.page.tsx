@@ -25,7 +25,6 @@ export const AppMainLayout = () => {
 
     const changeTheme = (theme: ThemeState) => {
         settingsStorage.store({id: settingsStorage.keys.theme, value: theme}).then(() => {
-            console.log(theme, currentTheme);
             document.documentElement.classList.remove(currentTheme);
             document.documentElement.classList.add(theme);
     
@@ -58,7 +57,7 @@ export const AppMainLayout = () => {
 
             <Content style={{padding: "10px"}}>
                 <Row>
-                    <Col style={{padding: "24px", borderRadius: "10px", background: "var(--body-background-secondary)"}} md={{ span: 12, offset: 6 }} xs={{ span: 24, offset: 0 }}>
+                    <Col style={{padding: "24px", borderRadius: "var(--border-radius)", background: "var(--body-background-secondary)"}} md={{ span: 12, offset: 6 }} xs={{ span: 24, offset: 0 }}>
                         <Outlet></Outlet>
                     </Col>
                 </Row>

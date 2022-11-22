@@ -144,7 +144,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ timer, onPlaySound }
                 <StepBackwardOutlined />
             </Button>
 
-            <Button type="action" height="76px" disabled={finished} onClick={() => timer.togglePause()}>
+            <Button autoFocus={true} type="action" height="76px" disabled={finished} onClick={() => timer.togglePause()}>
                 {paused ?
                     <PlayCircleOutlined />
                     :

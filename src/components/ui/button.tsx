@@ -11,6 +11,7 @@ export type ButtonProps = React.PropsWithChildren<{
     type?: "primary" | "link" | "action";
     icon?: React.ReactNode;
     disabled?: boolean;
+    autoFocus?: boolean;
     height?: string;
 }>
 
@@ -24,6 +25,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
         onClick,
         icon,
         disabled,
+        autoFocus,
         height
     } = props;
 
@@ -54,6 +56,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
     } as any;
 
     return <button
+        autoFocus={autoFocus}
         disabled={disabled}
         type={htmlType ?? "button"}
         className={classes.join(" ")}

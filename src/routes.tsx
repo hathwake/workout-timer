@@ -61,10 +61,8 @@ export const routes = createHashRouter([
 
                         await workoutStorage.store(workout);
 
-                        const countdown_step: ArrayBuffer = await (await fetch("assets/countdown_step.mp3")).arrayBuffer();
-                        const countdown_finished: ArrayBuffer = await (await fetch("assets/countdown_finished.mp3")).arrayBuffer();
-
-                        console.log(countdown_step);
+                        const countdown_step = await (await fetch("assets/countdown_step.mp3")).arrayBuffer();
+                        const countdown_finished = await (await fetch("assets/countdown_finished.mp3")).arrayBuffer();
                         
                         return {
                             workout,

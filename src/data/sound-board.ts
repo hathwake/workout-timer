@@ -20,7 +20,13 @@ export class SoundBoard<Keys extends string> {
         const buffers: Record<string, AudioBuffer> = {};
 
         for(const [key, arrayBuffer] of Object.entries<ArrayBuffer>(this.sounds)) {
-            buffers[key] = await ctx.decodeAudioData(arrayBuffer);
+            const uint8Buffer = new Uint8Array(arrayBuffer);
+            
+            const arrayBufferCopy = new ArrayBuffer(arrayBuffer.byteLength);
+            const uint8BufferCopy = new Uint8Array(arrayBufferCopy);
+            uint8BufferCopy.set(uint8Buffer);
+
+            buffers[key] = await ctx.decodeAudioData(arrayBufferCopy);
         }
 
         return {

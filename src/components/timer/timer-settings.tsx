@@ -35,11 +35,11 @@ export const TimerSettingsModal: React.FC<TimerSettingsProps> = (props) => {
 
     useEffect(() => {
         form.setFieldsValue(settings);
-    }, [form, settings]);
+    }, [form, settings, open]);
 
     return <Modal open={open} onClose={() => onCancel()} title={"Settings"}>
         <Form form={form} onFinish={() => onOk(form.getFieldsValue(true))}>
-            <Form.Item name={"soundEnabled"} label="Play Sound">
+            <Form.Item name={"soundEnabled"} label="Play Sound" valuePropName="checked">
                 {/* <Checkbox>Play Sound</Checkbox> */}
                 <Switch></Switch>
             </Form.Item>

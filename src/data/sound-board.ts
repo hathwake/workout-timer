@@ -39,14 +39,6 @@ export class SoundBoard<Keys extends string> {
         this.state = await this.createState();
     }
 
-    // async getState(): Promise<SoundBoardState<Keys>> {
-    //     if(!this.state) {
-    //         this.state = await this.createState();
-    //     }
-
-    //     return this.state;
-    // }
-
     async playSound(key: Keys, volume = 1): Promise<void> {
         if(this.state === undefined) {
             return;

@@ -36,12 +36,17 @@ export const EditPlan: React.FC<{}> = () => {
             }) => {
 
 
-                const genCollapseExtra = (index: number) => {
+                const genCollapseExtra = (index: number, itemName: string) => {
                     const confirmRemove = () => {
                         operation.remove(index);
                     };
 
+                    const duplicate = () => {
+                       console.log(itemName, form.getFieldValue([itemName]));
+                    };
+
                     return <span onClick={e => e.stopPropagation()}>
+                        <Button type="link" onClick={duplicate}>Duplicate</Button>
                         <Popconfirm
                             title="are you sure?"
                             onConfirm={confirmRemove}
@@ -53,10 +58,10 @@ export const EditPlan: React.FC<{}> = () => {
                     </span>;
                 };
 
-                const genPanel = (index: number, item: React.ReactNode, headerName: any, extra: React.ReactNode) => {
-                    const header = <FormValue name={[headerName, "name"]}></FormValue>;
+                const genPanel = (index: number, item: React.ReactNode, itemName: any, extra: React.ReactNode) => {
+                    const header = <FormValue name={[itemName, "name"]}></FormValue>;
 
-                    const extraNode = <span style={{whiteSpace: "nowrap"}}>{genCollapseExtra(index)}{extra}</span>;
+                    const extraNode = <span style={{whiteSpace: "nowrap"}}>{genCollapseExtra(index, itemName)}{extra}</span>;
                     const headerNode = <span style={{
                         whiteSpace: "nowrap",
                         overflow: "hidden",
